@@ -1,0 +1,151 @@
+1. Sơ đồ kiến trúc "MyFramework"
+Hệ thống của bạn hoạt động theo mô hình SPA (Single Page Application) cơ bản:
+
+Store (Kho dữ liệu): Là trái tim, chứa toàn bộ dữ liệu (Giỏ hàng, Sản phẩm, User...).
+
+Router (Điều hướng): Là cảnh sát giao thông, nhìn URL để quyết định gọi Component nào.
+
+Component (Giao diện): Là thợ xây, nhận dữ liệu từ Store và vẽ lên màn hình.
+
+Main.js (Nhạc trưởng): Kết nối 3 ông trên lại với nhau.
+
+2. Quy trình 5 Bước để thêm 1 Page mới
+Ví dụ thực tế: Bạn muốn thêm trang Hồ sơ cá nhân (ProfilePage).
+
+Bước 1: Chuẩn bị dữ liệu (File src/core/Store.js)
+Trước khi vẽ giao diện, hãy tự hỏi: Trang này cần dữ liệu gì?
+
+Nếu chỉ là trang tĩnh (Giới thiệu): Bỏ qua bước này.
+
+Nếu cần dữ liệu (Profile): Phải khai báo trong Store.
+Bước 2: Tạo Component giao diện (File src/app/components/ProfilePage.js)
+Tạo file mới. Luôn nhớ cấu trúc chuẩn: constructor nhận dữ liệu và callbacks (hành động).
+Bước 3: Đăng ký file vào hệ thống (File index.html)
+⚠️ Đây là bước hay quên nhất gây lỗi "Class is not defined". Bạn phải khai báo thẻ script của file mới tạo vào index.html, nằm trên main.js.
+Bước 4: Cấu hình Route & Nối dây (File `main.js`)
+Mở `main.js`, tìm đến khu vực `CẤU HÌNH ROUTES` để dạy Router biết khi nào thì hiện trang Profile.
+Bước 5: Tạo lối vào (Navigation)
+Cuối cùng, phải có cái nút để người dùng bấm vào trang đó (Thường là ở Header hoặc Footer).
+
+Cách 1 (Code cứng): appRouter.navigate('profile').
+
+Cách 2 (Sửa Header.js): Thêm nút vào menu.
+Đây là một câu hỏi rất hay. Để tránh "lỗi vặt" và code bị rối (Spaghetti code) khi dự án lớn dần, bạn cần nắm vững Luồng dữ liệu (Data Flow) và Quy trình thêm mới (Workflow) của Framework cây nhà lá vườn này.
+
+Dưới đây là sơ đồ tư duy và quy trình chuẩn "5 Bước" để bạn thêm bất kỳ tính năng hay trang mới nào mà không sợ phá vỡ hệ thống cũ.
+
+1. Sơ đồ kiến trúc "MyFramework"
+Hệ thống của bạn hoạt động theo mô hình SPA (Single Page Application) cơ bản:
+
+Store (Kho dữ liệu): Là trái tim, chứa toàn bộ dữ liệu (Giỏ hàng, Sản phẩm, User...).
+
+Router (Điều hướng): Là cảnh sát giao thông, nhìn URL để quyết định gọi Component nào.
+
+Component (Giao diện): Là thợ xây, nhận dữ liệu từ Store và vẽ lên màn hình.
+
+Main.js (Nhạc trưởng): Kết nối 3 ông trên lại với nhau.
+
+2. Quy trình 5 Bước để thêm 1 Page mới
+Ví dụ thực tế: Bạn muốn thêm trang Hồ sơ cá nhân (ProfilePage).
+
+Bước 1: Chuẩn bị dữ liệu (File src/core/Store.js)
+Trước khi vẽ giao diện, hãy tự hỏi: Trang này cần dữ liệu gì?
+
+Nếu chỉ là trang tĩnh (Giới thiệu): Bỏ qua bước này.
+
+Nếu cần dữ liệu (Profile): Phải khai báo trong Store.
+
+JavaScript
+
+// Vào Store.js
+class Store {
+    constructor() {
+        // 1. Khai báo state
+        this.user = JSON.parse(localStorage.getItem('user')) || { name: 'Khách', email: '' }; 
+        // ...
+    }
+
+    // 2. Viết hàm lấy dữ liệu (Getter)
+    getUser() { return this.user; }
+
+    // 3. Viết hàm sửa dữ liệu (Action)
+    updateProfile(info) {
+        this.user = { ...this.user, ...info };
+        this.save();   // Lưu LocalStorage
+        this.notify(); // Báo cho giao diện vẽ lại
+    }
+}
+Bước 2: Tạo Component giao diện (File src/app/components/ProfilePage.js)
+Tạo file mới. Luôn nhớ cấu trúc chuẩn: constructor nhận dữ liệu và callbacks (hành động).
+
+JavaScript
+
+// src/app/components/ProfilePage.js
+class ProfilePage extends Component {
+    // data: thông tin user lấy từ Store
+    // onSave: hàm callback để gọi ngược về main.js khi bấm nút Lưu
+    constructor(user, onSave) {
+        super("div", { class: "container" }, [
+            new Component("h2", {}, ["Hồ sơ cá nhân"]),
+            new Component("p", {}, [`Xin chào, ${user.name}`]),
+            new Button("Cập nhật tên", () => {
+                const newName = prompt("Nhập tên mới:");
+                if(newName) onSave({ name: newName }); // Gọi callback
+            }, "primary")
+        ]);
+    }
+}
+Bước 3: Đăng ký file vào hệ thống (File index.html)
+⚠️ Đây là bước hay quên nhất gây lỗi "Class is not defined". Bạn phải khai báo thẻ script của file mới tạo vào index.html, nằm trên main.js.
+
+HTML
+
+<script src="src/app/components/CheckoutPage.js"></script>
+
+<script src="src/app/components/ProfilePage.js"></script> 
+
+<script src="main.js"></script> ```
+
+#### Bước 4: Cấu hình Route & Nối dây (File `main.js`)
+Mở `main.js`, tìm đến khu vực `CẤU HÌNH ROUTES` để dạy Router biết khi nào thì hiện trang Profile.
+
+```javascript
+// main.js
+
+// ...
+appRouter.addRoute("profile", () => {
+    // Đây là nơi "Nối dây" giữa Store và Component
+    return new ProfilePage(
+        appStore.getUser(), // 1. Lấy dữ liệu từ Store ném vào Component
+        (newInfo) => {      // 2. Định nghĩa hàm xử lý khi Component báo về
+            appStore.updateProfile(newInfo);
+            Toast.success("Cập nhật hồ sơ thành công!");
+        }
+    );
+});
+Bước 5: Tạo lối vào (Navigation)
+Cuối cùng, phải có cái nút để người dùng bấm vào trang đó (Thường là ở Header hoặc Footer).
+
+Cách 1 (Code cứng): appRouter.navigate('profile').
+
+Cách 2 (Sửa Header.js): Thêm nút vào menu.
+
+3. Checklist kiểm tra (Tránh lỗi vặt)
+Mỗi khi code xong một tính năng, hãy tích vào checklist này:
+
+[ ] File Script: Đã thêm <script src="..."> vào index.html chưa?
+
+[ ] Thứ tự Load: File Component mới có nằm trước main.js không?
+
+[ ] Store Logic: Hàm trong Store có gọi this.save() và this.notify() sau khi sửa dữ liệu không? (Nếu quên notify, giao diện sẽ không đổi).
+
+[ ] Callback: Trong main.js, các hàm callback truyền vào Component có hoạt động đúng không? (Nên console.log để test).
+
+[ ] ID trùng lặp: Các ô input trong trang mới có ID trùng với trang cũ không? (Nên đặt prefix như profile-name, checkout-name).
+
+4. Tại sao làm theo quy trình này code sẽ bền?
+Tách biệt: Giao diện (ProfilePage.js) không biết gì về logic lưu trữ. Nó chỉ biết hiển thị và báo lại sự kiện.
+
+Tập trung: Mọi logic nghiệp vụ (Lưu data, tính toán) đều nằm trong Store.js và main.js. Khi sửa lỗi logic, bạn chỉ cần tìm ở 2 file này.
+
+Dễ debug: Nếu lỗi giao diện -> Xem file Component. Nếu lỗi dữ liệu -> Xem Store.

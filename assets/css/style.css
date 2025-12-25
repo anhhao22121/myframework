@@ -1,0 +1,144 @@
+/* --- 1. IMPORT FONT (Hiện đại hơn) --- */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+/* --- 2. RESET & BASE --- */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body { 
+    font-family: 'Poppins', sans-serif; /* Font chữ tròn trịa, hiện đại */
+    background-color: #f0f2f5; /* Màu nền xám xanh nhạt dịu mắt */
+    color: #444; 
+    line-height: 1.6; 
+    padding-bottom: 40px; 
+}
+
+a { text-decoration: none; color: inherit; transition: 0.3s; }
+ul { list-style: none; }
+
+/* --- 3. LAYOUT UTILS --- */
+.container { max-width: 1140px; margin: 0 auto; padding: 0 20px; }
+.flex-col { display: flex; flex-direction: column; }
+.flex-row { display: flex; align-items: center; }
+.flex-between { display: flex; justify-content: space-between; align-items: center; }
+
+/* Grid sản phẩm thoáng hơn */
+.grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); 
+    gap: 30px; /* Tăng khoảng cách khe hở */
+}
+
+/* --- 4. BUTTONS (Sang xịn mịn) --- */
+.btn { 
+    padding: 10px 24px; 
+    border: none; 
+    border-radius: 50px; /* Bo tròn hình viên thuốc */
+    cursor: pointer; 
+    font-size: 14px; 
+    font-weight: 600; 
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease; 
+    display: inline-flex; 
+    align-items: center; 
+    justify-content: center; 
+    gap: 8px; 
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Đổ bóng nhẹ cho nút */
+}
+
+.btn:hover { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.15); }
+.btn:active { transform: translateY(0); }
+
+/* Bảng màu Modern */
+.btn-primary { 
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Màu tím xanh Gradient */
+    color: white; 
+}
+.btn-danger { 
+    background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%); /* Màu đỏ cam Gradient */
+    color: white; 
+}
+.btn-success { 
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); /* Màu xanh lá Gradient */
+    color: white; 
+}
+.btn-secondary { 
+    background: #e4e6eb; 
+    color: #333; 
+    box-shadow: none;
+}
+.btn-secondary:hover { background: #d8dadf; }
+
+.btn-sm { padding: 6px 12px; font-size: 12px; height: 30px; }
+.btn-icon { background: none; color: #aaa; font-size: 20px; padding: 0; box-shadow: none; }
+.btn-icon:hover { color: #ff416c; transform: none; box-shadow: none; }
+
+/* --- 5. TYPOGRAPHY --- */
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.text-bold { font-weight: 600; }
+.text-price { color: #ff4b2b; font-weight: 700; font-size: 1.1rem; }
+
+.title-main { 
+    text-align: center; 
+    margin: 40px 0; 
+    font-size: 28px;
+    font-weight: 700;
+    color: #333;
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+/* Gạch chân dưới tiêu đề */
+.title-main::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 4px;
+    background: #764ba2;
+    margin: 10px auto 0;
+    border-radius: 2px;
+}
+/* --- TOAST NOTIFICATION --- */
+#toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.toast {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 250px;
+    padding: 12px 20px;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    font-size: 14px;
+    animation: slideIn 0.3s ease;
+    border-left: 5px solid #ccc; /* Màu mặc định */
+}
+
+/* Màu sắc theo loại */
+.toast-success { border-left-color: #2ecc71; }
+.toast-success .toast-icon { color: #2ecc71; font-weight: bold; }
+
+.toast-error { border-left-color: #e74c3c; }
+.toast-error .toast-icon { color: #e74c3c; font-weight: bold; }
+
+.toast-info { border-left-color: #3498db; }
+.toast-info .toast-icon { color: #3498db; font-weight: bold; }
+
+/* Hiệu ứng */
+@keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideOut {
+    to { transform: translateX(100%); opacity: 0; }
+}
